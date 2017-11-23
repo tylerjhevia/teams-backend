@@ -29,6 +29,10 @@ app.use((req, res, next) => {
 
 app.set('port', process.env.PORT || 3001);
 
+app.listen(app.get('port'), () => {
+  console.log(`${app.locals.title} is running on ${app.get('port')}.`);
+});
+
 app.get('/api/v1/users', (request, response) =>
   db('users')
     .select()
