@@ -3,7 +3,6 @@ exports.up = (knex, Promise) => {
     knex.schema.createTable('users', table => {
       table.increments('id').primary();
       table.string('username').unique();
-      table.string('email').unique();
       table.string('password');
       table.timestamps(true, true);
     })

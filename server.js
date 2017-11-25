@@ -40,4 +40,18 @@ app.get('/api/v1/users', (request, response) =>
     .catch(error => response.status(500).json({ error }))
 );
 
+app.post('/api/v1/users', (request, response) => {
+  const requiredKeys = ['username', 'password'];
+
+  for (const keys of requiredKeys) {
+    if (!request.body[keys]) {
+      return response.status(400).json({ error: `Missing key: ${keys}` });
+    }
+  }
+  db('users')
+    .insert(request.body, '*')
+    .then(user => response.status(201).json(user[0]))
+    .catch(error => response.status(500).json({ error }));
+});
+
 module.exports = app;
