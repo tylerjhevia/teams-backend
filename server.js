@@ -40,6 +40,19 @@ app.get('/api/v1/users', (request, response) =>
     .catch(error => response.status(500).json({ error }))
 );
 
+app.get('/api/v1/users/:username', (request, response) => {
+  const username = request.params;
+  db('users')
+    .where(username)
+    .select()
+    .then(
+      user =>
+        !user.length
+          ? response.status(404).json({ error: 'Username does not exist' })
+          : response.status(200).json(user[0])
+    );
+});
+
 app.post('/api/v1/users', (request, response) => {
   const requiredKeys = ['username', 'password'];
 
