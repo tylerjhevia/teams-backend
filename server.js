@@ -53,6 +53,13 @@ app.get('/api/v1/users/:username', (request, response) => {
     );
 });
 
+app.get('/api/v1/teams', (request, response) => {
+  db('teams')
+    .select()
+    .then(teams => response.status(200).json(teams))
+    .catch(error => response.status(500).json({ error }));
+});
+
 app.post('/api/v1/users', (request, response) => {
   const requiredKeys = ['username', 'password'];
 
