@@ -40,10 +40,11 @@ app.get('/api/v1/users', (request, response) =>
     .catch(error => response.status(500).json({ error }))
 );
 
-app.get('/api/v1/users/:username', (request, response) => {
-  const username = request.params;
+app.get('/api/v1/users/:username/:password', (request, response) => {
+  const { username, password } = request.params;
+  const user = { username, password };
   db('users')
-    .where(username)
+    .where(user)
     .select()
     .then(
       user =>
