@@ -75,4 +75,26 @@ app.post('/api/v1/users', (request, response) => {
     .catch(error => response.status(500).json({ error }));
 });
 
+app.post('/api/v1/teams', (request, response) => {
+  const requiredKeys = [
+    'team_name',
+    'user_id',
+    'player_1',
+    'player_2',
+    'player_3',
+    'player_4',
+    'player_5'
+  ];
+
+  for (const keys of requiredKeys) {
+    if (!request.body[keys]) {
+      return response.status(400).json({ error: `Missing key: ${keys}` });
+    }
+  }
+  db('teams')
+    .insert(request.body, '*')
+    .then(team => response.status(201).json(team[0]))
+    .catch(error => response.status(500).json({ error }));
+});
+
 module.exports = app;
