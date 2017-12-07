@@ -61,6 +61,21 @@ app.get('/api/v1/teams', (request, response) => {
     .catch(error => response.status(500).json({ error }));
 });
 
+app.get('/api/v1/teams/:user_id', (request, response) => {
+  const { user_id } = request.params;
+  db('teams')
+    .where('user_id', user_id)
+    .select()
+    .then(
+      teams =>
+        !teams.length
+          ? response
+              .status(404)
+              .json({ error: 'No teams found for given user_id' })
+          : response.status(200).json(teams)
+    );
+});
+
 app.post('/api/v1/users', (request, response) => {
   const requiredKeys = ['username', 'password'];
 
