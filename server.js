@@ -103,6 +103,7 @@ app.post('/api/v1/teams', (request, response) => {
 
   for (const keys of requiredKeys) {
     if (!request.body[keys]) {
+      console.log('missing', keys);
       return response.status(400).json({ error: `Missing key: ${keys}` });
     }
   }
@@ -110,6 +111,22 @@ app.post('/api/v1/teams', (request, response) => {
     .insert(request.body, '*')
     .then(team => response.status(201).json(team[0]))
     .catch(error => response.status(500).json({ error }));
+});
+
+app.delete('/api/v1/teams/:id', (request, response) => {
+  const id = request.params;
+
+  db('teams')
+    .where(id)
+    .del()
+    .then(
+      length =>
+        length
+          ? response.sendStatus(204)
+          : response
+              .status(404)
+              .send({ error: `No team found with id of ${id}` })
+    );
 });
 
 module.exports = app;
